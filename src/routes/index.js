@@ -8,7 +8,7 @@ router.get('/', (req, res)=>{
 });
 
 router.get('/upload', (req, res)=>{
-    res.send('Form upload');
+    res.render('upload');
 });
 
 router.post('/upload', (req, res)=>{
