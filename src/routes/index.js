@@ -7,11 +7,12 @@ router.get('/', (req, res)=>{
     res.send('Index page');
 });
 
-router.get('/upload', (req, res)=>{
+router.get('/upload', (req, res)=>{ 
     res.render('upload');
 });
 
 router.post('/upload', (req, res)=>{
+    console.log(req.file);
     res.send('uploades');
 });
 
