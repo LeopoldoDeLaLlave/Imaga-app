@@ -1,19 +1,20 @@
 const { Router } = require('express');
-
+const { unlink } = require('fs-extra');
+const path = require('path');
 const router = Router();
 
 const Image = require('../models/image');
 
-router.get('/', async(req, res) => {
+router.get('/', async (req, res) => {
     const images = await Image.find();
-    res.render('index', {images});
+    res.render('index', { images });
 });
 
 router.get('/upload', (req, res) => {
     res.render('upload');
 });
 
-router.post('/upload', async(req, res) => {
+router.post('/upload', async (req, res) => {
     const image = new Image();
     image.title = req.body.title;
     image.description = req.body.description;
@@ -29,13 +30,18 @@ router.post('/upload', async(req, res) => {
 });
 
 router.get('/image/:id', async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const image = await Image.findById(id);
-    res.render('profile', {image});
+    res.render('profile', { image });
 });
 
-router.get('/image/:id/delete', (req, res) => {
-    res.send('Image deleted');
+router.get('/image/:id/delete', async (req, res) => {
+    const { id } = req.params;
+    //Lo eliminamos de la base de datos
+    const imageDeleted = await Image.findByIdAndDelete(id);
+    //Lo eliminamos de nuestra carpeta public
+    await unlink(path.resolve('./src/public' + imageDeleted.path));
+    res.redirect('/');
 });
 
 module.exports = router;
