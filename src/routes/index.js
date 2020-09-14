@@ -28,8 +28,10 @@ router.post('/upload', async(req, res) => {
     res.redirect('/');
 });
 
-router.get('/image/:id', (req, res) => {
-    res.send('Profile image');
+router.get('/image/:id', async (req, res) => {
+    const {id} = req.params;
+    const image = await Image.findById(id);
+    res.render('profile', {image});
 });
 
 router.get('/image/:id/delete', (req, res) => {
